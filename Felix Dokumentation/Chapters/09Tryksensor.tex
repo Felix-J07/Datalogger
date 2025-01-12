@@ -1,0 +1,30 @@
+\section{Tryksensor}
+	Den valgte tryksensoren kan både bruges som en barometrisk tryk sensor og som en højdemåler. Dog for at højdemålinger fra denne sensor skal passe, skal sensoren kalibreres hele tiden. Sensoren, som bliver brugt, er en Adafruit MLP3115A2 sensor. \\ [7pt]
+	Sensoren har 4 pins forbundet til Arduinoen. 3Vo til 3.3V, GND til GND, SCL til SCL porten og SDA til SDA porten. På Arduino Mega er port 20 ment som en SDA port og port 21 er ment som en SCL port. Hvis der er flere sensorer, som har SDA og SCL pins, så kan de alle sammen samles og tilkobles til port 20 og 21.
+	\subsection{Kode}
+		Der bruges et bibliotek fra Adafruit til denne sensor, som hedder "Adafruit\_MPL3115A2.h". Før setup funktionen defineres en instans af et objekt fra biblioteket. I setup funktionen bliver der skabt en forbindelse mellem sensoren og Arduinoen med ".begin()"{} funktionen gennem den defineret instans. Herefter kan man sætte en værdi for trykket ved havniveau, hvis man vil måle højden. Denne værdi skal dog opdateres en gang imellem, hvis man vil måle den rigtige højde. I loop funktionen bliver funktionen ".getPressure()"{} brugt fra instansen, hvor den giver trykket som output i hPa.
+		\begin{lstlisting}
+#include <Adafruit_MPL3115A2.h>
+#include <Wire.h>
+#include <SPI.h>
+
+// Pressure sensor
+Adafruit_MPL3115A2 baro;
+
+void setup() {
+	// Console config
+	Serial.begin(9600);
+	// Initializing barometric sensor
+	if (!baro.begin()) {
+		Serial.println("Could not find sensor. Check wiring.");
+		while(1);
+	}
+	baro.setSeaPressure(1013.26);
+}
+void loop() {
+	// Getting pressure value from sensor
+	float pressure = baro.getPressure();
+	Serial.println(String("The pressure is: ") + pressure + "hPa");
+	delay(1000);
+}
+		\end{lstlisting}

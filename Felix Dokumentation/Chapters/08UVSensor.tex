@@ -1,0 +1,29 @@
+\section{UV sensor}
+	En Adafruit VEML6075 bliver brugt som UV sensoren til dataloggeren. \\ [7pt]
+	Der er forbundet 4 pins fra sensoren til Arduinoen. 3Vo til 3.3V, GND til GND, SCL til SCL porten og SDA til SDA porten. På Arduino Mega er port 20 ment som en SDA port og port 21 er ment som en SCL port. Hvis der er flere sensorer, som har SDA og SCL pins, så kan de alle sammen samles og tilkobles til port 20 og 21.
+	\subsection{Kode}
+		Adafruit har lavet et bibliotek til Arduino til denne sensor, som hedder "Adafruit\_VEML6075.h". Før setup funktionen definerer man en instans af en type defineret i biblioteket. I setup funktionen bliver den instans brugt til at skabe en forbindelse mellem Arduinoen og sensoren via ".begin()"{} funktionen. I loop kan man få UV indexet ved at kalde ".readUVI()"{} funktionen til instansen. 
+		\begin{lstlisting}
+#include <Adafruit_VEML6075.h>
+#include <Wire.h>
+#include <SPI.h>
+
+Adafruit_VEML6075 uv = Adafruit_VEML6075();
+
+void setup() {
+	// Console config
+	Serial.begin(9600);
+	// Initializing UV sensor
+	if (! uv.begin()) {
+		Serial.println("Failed to communicate with VEML6075 sensor, check wiring?");
+		while (1) { delay(100); } // Infinite loop
+	}
+}
+
+void loop() {
+	// Getting uv index from sensor
+	float uv_value = uv.readUVI();
+	Serial.println(String("The UV index is: ") + uv_value);
+	delay(1000);
+}
+		\end{lstlisting}

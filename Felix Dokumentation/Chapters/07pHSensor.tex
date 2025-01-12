@@ -1,0 +1,29 @@
+\section{pH Sensor}
+	Som pH modul blev der brugt en 'PH4502C'. Modulet har tilkoblet en sonde, som måler pH i en væske. \\ [7pt]
+	På sensoren blev der tilkoblet 4 pins til Arduinoen. V+ til 5V, G til GND, PO til A0 og TO til A1. PO giver et analog output man kan omregne til en pH værdi. TO giver et analog output til at omregne til en temperatur. Temperaturmålingerne giver dog ikke korrekte målinger, og derfor bliver der brugt en digital temperaturmåler.
+	\subsection{Kode}
+		Til pH modulet hører et bibliotek med, som hedder "ph4502c\_sensor.h". Før setup funktionen defineres en instans af biblioteket, hvor man angiver portene, som PO og TO er koblet til. I setup starter man forbindelsen til modulet via ".init()"{} funktionen fra instansen. I loop kan man bruge ".read\_ph\_level()"{} fra instansen for at få pH værdien.
+		\begin{lstlisting}
+#include <Wire.h>
+#include <SPI.h>
+#include <ph4502c_sensor.h>
+
+// PH sensor config
+const uint8_t PO = A0;
+const uint8_t TO = A1;
+PH4502C_Sensor ph4502c(PO, TO);
+
+void setup() {
+	// Console config
+	Serial.begin(9600);
+	// Initialize the PH sensor
+	ph4502c.init();
+}
+
+void loop() {
+	// Getting pH value from sensor
+	float pH = ph4502c.read_ph_level();
+	Serial.println(String("pH value is: ") + pH);
+	delay(1000);
+}
+		\end{lstlisting}

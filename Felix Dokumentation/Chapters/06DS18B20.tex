@@ -1,0 +1,33 @@
+\section{Digital temperatur sensor}
+	En digital temperatur måler bliver brugt til at måle temperaturen. En analog temperatur måler kunne ikke bruges, fordi det var ikke muligt at kalibrere en analog temperaturmåler, således den ville give en korrekt måling, hvilket er grunden til at en digital temperatur måler bliver brugt.\\ [7pt]
+	Sensoren har 3 pins. En rød 5V, en sort GND og en gul data pin, hvilket er forbundet til 5V via en 1K$\Omega$ resistor.
+	\subsection{Kode}
+		DS18B20 temperatur sensoren skal bruge to biblioteker, "OneWire.h" og "DallasTemperature.h". I koden defineres en OneWire instans med porten for data pin forbundet til Arduinoen. Herefter bruges en reference til OneWire instansen i en DallasTemperature instans. Denne variabel er kaldt "sensors". \\ [7pt]
+		I setup funktionen bruges ".begin()"{} metoden på "sensors". I loop funktionen bruges ".requestTemperatures()"{} metoden fra "sensors", som får temperatursensoren til at tage en måling. Herefter kan man kalde ".getTempCByIndex(0)"{} til at få værdien på målingen, så længe man kun har én temperatursensor koblet på den ene port. 
+		\begin{lstlisting}
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <SPI.h>
+#include <Wire.h>
+
+// DS18B20 config
+const int tempDigitalPin = 22;        // Data pin where the temperature sensor is connected
+OneWire oneWire(tempDigitalPin);      // Setup a oneWire instance to communicate with any OneWire devices
+DallasTemperature sensors(&oneWire);  // Pass our oneWire reference to Dallas Temperature sensor
+
+void setup() {
+	// Console config
+	Serial.begin(9600);
+	// Initializes the digital temperature sensor
+	sensors.begin();
+}
+
+void loop() {
+	// Getting temperature from sensor
+	sensors.requestTemperatures();
+	float tempC = sensors.getTempCByIndex(0);
+	
+	Serial.println(String("Temperature in Celsius: ") + tempC);
+	delay(1000);
+}
+		\end{lstlisting}

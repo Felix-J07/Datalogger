@@ -1,0 +1,56 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc} % uft8 you know
+\usepackage[danish]{babel}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+%\usepackage{biblatex}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+\usepackage{graphicx}
+\usepackage{pdfpages} % Til at inkludere pdf'er
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{blindtext}
+\usepackage[margin=2.7cm]{geometry}
+\usepackage{tabularx, booktabs, siunitx}
+\usepackage{multirow}
+\usepackage{natbib} % Works with.bib files
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{placeins}
+\usepackage{listings}
+
+\bibliographystyle{apalike} 
+% Define custom settings for C++ code
+\lstset{
+	language=C++, % Set the language to C++
+	basicstyle=\ttfamily\small, % Use a monospaced font
+	numbers=left, % Line numbers on the left
+	numberstyle=\tiny\color{gray}, % Line number style
+	stepnumber=1, % Line number increment
+	numbersep=5pt, % Space between line numbers and code
+	backgroundcolor=\color{lightgray!10}, % Light gray background
+	showspaces=false, % Don't show spaces
+	showstringspaces=false, % Don't mark spaces in strings
+	showtabs=false, % Don't show tab characters
+	frame=single, % Single-line frame around code
+	rulecolor=\color{black}, % Frame color
+	tabsize=2, % Tab size
+	captionpos=b, % Caption position (bottom)
+	breaklines=true, % Allow breaking lines
+	breakatwhitespace=false, % Only break at whitespace if true
+	keywordstyle=\color{blue}, % Keywords in blue
+	commentstyle=\color{green!60!black}, % Comments in green
+	stringstyle=\color{red}, % Strings in red
+}
+
+%\geometry{
+%	total={170mm,257mm},
+%	left=20mm,
+%	top=30mm,
+%	bottom=30mm,
+%}

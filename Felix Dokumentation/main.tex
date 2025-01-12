@@ -1,0 +1,54 @@
+\input{Settings/Preamble.tex}
+\hypersetup{
+    pdftitle={Sådan bygger du din egen datalogger - Science klubben},
+    pdfauthor={Science klubben - Kristoffer Sørensen, Felix Jensen},
+    % Remove the red border around links
+    pdfborder={0 0 0},
+}
+
+\pagestyle{fancy} % definds the pagestyleing
+\renewcommand{\headrulewidth}{0pt} % Removes the line under the header
+
+\fancyhead{}
+\fancyhead[l]{Science Klub - Datalogger}
+\fancyhead[r]{\today}
+\fancyfoot{}
+\fancyfoot[C]{Side \thepage\ af \pageref{LastPage}}
+%\fancyhf{} % Removes the wired header text
+%\cfoot{Side \thepage\ af \pageref{LastPage}} % Sets the right side of the footer to "Page X of Y"
+%\lhead{Gruppe 1} % Sets the left side of the header to "Gruppe 1"
+
+\begin{document}
+    %\providecommand\NAT
+    \input{Chapters/01TitlePage.tex}
+    \newpage
+    \tableofcontents
+    \newpage
+    
+    \input{Chapters/02Introduktion.tex}
+    
+    \newpage
+    \clearpage
+    \input{Chapters/03KodeOgFlowchart.tex}
+    \newpage
+    \clearpage
+    \input{Chapters/04RTC.tex}
+    \newpage
+    \clearpage
+    \input{Chapters/05SDCard.tex}
+	\newpage
+	\clearpage
+	\input{Chapters/06DS18B20.tex}
+	\newpage
+	\clearpage
+	\input{Chapters/07pHSensor.tex}
+	\newpage
+	\clearpage
+	\input{Chapters/08UVSensor.tex}
+	\newpage
+	\clearpage
+	\input{Chapters/09Tryksensor.tex}
+	\newpage
+	\clearpage
+%\input{Chapters/10MQ2GasSensor.tex}
+\end{document}

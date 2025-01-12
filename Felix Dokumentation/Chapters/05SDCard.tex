@@ -1,0 +1,56 @@
+\section{SD Card Module}
+	SD modulet er det vigtigste modul i hele dataloggeren. Den gør det muligt at skabe en forbindelse mellem Arduinoen og SD-kortet. Dette betyder også, at hvis modulet ikke virker, så vil selve dataloggeren ikke virke. Når den måler data, skal den have et eksternt lager, for at lagre dataet. \\ [7pt]
+	Sensoren har 7 pins, der skal forbindes med Arduinoen. 5V, 3.3V (optional), Ground, CS, MOSI, SCK, MISO. På Arduino Mega er porte 50 -- 52 reserveret til netop disse funktioner. SCK til 52, MOSI til 51, MISO til 50. CS kan forbindes til hvilken som helst pin på Arduinoen, men koden nedenunder er skrevet således, at CS skal være forbundet til port 53.\\ [7pt]
+	Dette modul har skabt mange problemer undervejs i udviklingen. Dette er en tjekliste for at teste modulet, hvis den ikke virker:
+	\begin{itemize}
+		\item Sørg for at der er nok strøm til Arduinoen, så der vil være nok strøm til modulet
+		\item Sørg for, at ledningerne sidder ordenligt
+		\item Sørg for, at SD kortet fungerer, er formateret korrekt og er sat rigtigt i modulet
+	\end{itemize}
+	Hvis modulet stopper med at fungere efter der er påsat flere sensorer, prøv at flytte SD Kort Modulet over til en tom Arduino. Hvis den ikke virker på den tomme Arduino, betyder det højest sandsynligt, at modulet ikke virker.
+	 
+	\subsection{Kode}\label{sec:SDCode}
+		Til SD Kort Modulet er der brug for biblioteket "SD.h". Herefter defineres hvilken port man har koblet CS pin til, variablen er kaldt sdCard i koden nedenunder, og man definerer et navn for filen man vil skrive til på SD kortet, variablen er kaldt dataFileName i koden nedenunder. For at skrive til en fil, skal man bruge en variabel af typen "File", hvilket blev kaldt dataFile. I setup funktionen bliver "SD.open()"{} kaldt, hvor sdCard variablen bliver brugt til at oprette forbindelse til modulet. \\ [5pt]
+		I loop funktionen bliver dataFile sat til output fra "SD.open()", som tager to argumenter. Den ene er filnavnet (dataFileName) og hvilke rettigheder der er behov for til filen (FILE\_READ eller FILE\_WRITE). Hvis det lykkedes at forbinde til SD kortet gennem "open()", så bliver der skrevet til dataFile med ".print()"{} funktionen. Herefter bruger man ".flush()"{} til at sende dataet til SD kortet, og lukker SD kortets forbindelse med ".close()". Hvis det ikke lykkedes at forbinde til SD kortet, bliver der skrevet til konsollen, at der er problemer med SD kortet.
+		\begin{lstlisting}
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
+
+// SD card config
+const int sdCard = 53;                  // This is the pin for the SD card reader (CS)
+const char* dataFileName = "data.dat";  // Name of the file you want to save to.
+
+// Variable to write to the SD card
+File dataFile;
+
+void setup() {
+	// Console config
+	Serial.begin(9600);
+	
+	// Initializing the SD card reader
+	if (!SD.begin(sdCard)) {
+		Serial.println("initialization failed!");
+		while (1)
+		;
+	}
+	Serial.println("initialization done.");
+}
+
+void loop() {
+	// Establishes connection to the SD card
+	dataFile = SD.open(dataFileName, FILE_WRITE);
+	// Check if file opened successfully
+	if (dataFile)
+	{
+		dataFile.print("Test\n");
+		Serial.println("Data written to the file.");
+		dataFile.flush();  // Flush the data to the SD card
+		// Close the file
+		dataFile.close();
+	} else {
+		Serial.println("Error opening the file.");
+	}
+	delay(1000);
+}
+		\end{lstlisting}

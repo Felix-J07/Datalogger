@@ -1,0 +1,46 @@
+\section{RTC Module (Real Time Clock)}
+	RTC er et modul, som kan holde styr på tiden meget præcist. Modulet bruges til at få en tid og en dato til hver måling af sensorerne. \\ [7pt]
+	Sensoren har 4 pins der skal forbindes med Arduinoen. 5V, Ground, SDA og SCL. På Arduino Mega er port 20 ment som en SDA port og port 21 er ment som en SCL port. Hvis der er flere sensorer, som har SDA og SCL pins, så kan de alle sammen samles og tilkobles til port 20 og 21.
+	\subsection{Kode}
+		For at RTC modulet kan virke, er der brug for biblioteket, der hedder "RTClib.h". Herefter defineres i koden, før setup funktionen, hvilke porte SCL og SDA pins er tilkoblet til og der laves en instans af typen "RTC\_DS1307". Herefter initialiseres RTC modulet med en af instansens funktioner, "begin()". Herefter bliver der lavet tests for at se, om modulet virker. For at få tiden og datoen, kalder man en anden af objektets funktioner, "now()". Den funktion giver en "DateTime"{} værdi tilbage, som man kan gå ind i og få mere specifikke tidsoplysninger, såsom årstal, minuttal eller sekunder.
+		
+		\begin{lstlisting}
+#include <RTClib.h>
+#include <Wire.h>
+#include <SPI.h>
+
+RTC_DS1307 rtc;
+
+// RTC config
+const int rtcSDA = 20;
+const int rtcSCL = 21;
+
+void setup() {
+	// Console config
+	Serial.begin(9600);
+	
+	// Initializes the rtc module
+	if (!rtc.begin()) {
+		Serial.println("Couldn't find RTC");
+		while (1)
+		;
+	}
+	
+	// Checks the time from the module
+	DateTime now = rtc.now();
+	if (now.year() < 2000) {
+		Serial.println("RTC lost power, let's set the time!");
+		// Following line sets the RTC to the date & time this sketch was compiled
+		rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // This is the line that sets the time to the time the code was compiled, if you want to change it you can do it here!
+	}
+}
+
+void loop() {
+	DateTime time = rtc.now();
+	// Print YYYY-MM-DD
+	Serial.println(String(time.year()) + "-" + time.month() + "-" + time.day());
+	// Print HH-MM-SS
+	Serial.println(String(time.hour()) + "-" + time.month() + "-" + time.second());
+	delay(1000);
+}
+		\end{lstlisting}
