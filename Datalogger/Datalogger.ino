@@ -130,11 +130,12 @@ void logdata(String date, String time) {
   Serial.println(pressureValue);
   Serial.print("Time: ");
   Serial.println(time);
-  writeToSDCard(date + "," + time + "," + temperature + "," + pHValue + "," + uvValue + "," + pressureValue + "\n");  // Can add Humidity, Soil Moisture, Light Intensity, Water Level
+  writeToSDCard(date + ";" + time + ";" + temperature + ";" + pHValue + ";" + uvValue + ";" + pressureValue + "\n");  // Can add Humidity, Soil Moisture, Light Intensity, Water Level
 }
 
 bool writeToSDCard(String data) {
   dataFile = SD.open(dataFileName, FILE_WRITE);
+  Serial.println(data);
   // Check if the file opened successfully
   if (dataFile) {
     // Write data to the file
@@ -154,7 +155,7 @@ bool writeToSDCard(String data) {
 // This prints the header to the SD card
 void header() {
   int attempts = 0;
-  while (!writeToSDCard("Date, Time, Temperature, pH Value, UV Index, Pressure (hPa)\n")) {
+  while (!writeToSDCard("Date;Time;Temperature;pH Value;UV Index;Pressure (hPa)\n")) {
     attempts++;
     // If the function could not print to the SD card after 10 tries, then it gives up
     if (attempts > 10) {
