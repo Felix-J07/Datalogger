@@ -13,7 +13,8 @@ RTC_DS1307 rtc;
 // RTC config
 const int rtcSDA = 20;
 const int rtcSCL = 21;
-const int delayInMinutes = 1;  // We desided to take a reading every 10 minutes, but if you want to change it this is the place to do it!
+// We desided to take a reading every 10 minutes, but if you want to change it this is the place to do it!
+const int delayInMinutes = 10;  
 
 // SD card config
 const int sdCard = 53;                  // This is the pin for the SD card reader (CS)
@@ -25,7 +26,7 @@ const int termistorPin = A0;
 */
 
 // Digital temperature sensor config (DS18B20)
-const int tempDigitalPin = 22;        // Data pin where the temperature sensor is connected
+const int tempDigitalPin = 22;        // Data pin connection for sensor
 OneWire oneWire(tempDigitalPin);      // Setup a oneWire instance to communicate with any OneWire devices
 DallasTemperature tempSensors(&oneWire);  // Pass our oneWire reference to Dallas Temperature sensor
 
@@ -92,7 +93,6 @@ void setup() {
 
 void loop() {
   time();
-  // Your timer logic can be implemented here
 }
 
 void time() {
@@ -114,12 +114,12 @@ void time() {
 
 void logdata(String date, String time) {
   Serial.println("Logging data...");
-  // TODO: use the diffrent sensors function to log data
   // Gets data from temperature sensor and pH sensor
   float temperature = temp();
   float pHValue = pH();
   float uvValue = UV();
   float pressureValue = pressure();
+  /* For debugging
   Serial.print("Temperature: ");
   Serial.println(temperature);
   Serial.print("pH Value read: ");
@@ -130,6 +130,9 @@ void logdata(String date, String time) {
   Serial.println(pressureValue);
   Serial.print("Time: ");
   Serial.println(time);
+  */
+
+  // .csv format
   writeToSDCard(date + ";" + time + ";" + temperature + ";" + pHValue + ";" + uvValue + ";" + pressureValue + "\n");  // Can add Humidity, Soil Moisture, Light Intensity, Water Level
 }
 
@@ -185,23 +188,8 @@ float temp() {
   return tempC;
 }
 
-float pH() {
-  /* Test
-  float reading = 0;
-  for(int i = 0; i < 10; i++) {
-    reading += analogRead(PO);
-    Serial.println("Raw reading: " + reading); 
-    delayMicroseconds(100);
-  }
-  reading = 5.0 / 1024.0 * reading;
-  Serial.print("1. reading edit: ");
-  Serial.println(reading);
-  reading /= 10;
-  Serial.println("2. reading edit: " + reading);
-  reading = 14.8 + ((2.5 - reading)) / 0.18;
-  Serial.println("3. reading edit: " + reading);
-  
-  // Test
+float pH() {  
+  /* Failed temperature sensor on pH sensor (TO pin)
   float temp = ph4502c.read_temp();
   Serial.println("pH temp: " + temp); 
   End test */
@@ -216,8 +204,4 @@ float UV() {
 
 float pressure() {
   return baro.getPressure();
-}
-
-float Gas() {
-
 }
